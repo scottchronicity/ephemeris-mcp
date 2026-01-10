@@ -5,14 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python Debugger: Current File",
+      "name": "Debug MCP Server",
       "type": "debugpy",
       "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal"
+      "module": "astro_mcp.server",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
     },
     {
-      "name": "Python Debugger: Current File",
+      "name": "Debug Current File",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",

@@ -16,16 +16,28 @@ help:
 	@echo "make format       - Format code using Ruff"
 	@echo "make lint         - Lint code using Ruff"
 	@echo "make test         - Run tests with coverage"
+	@echo "make validate-dev - Run full development validation (install, lint, format, test, release-dry-run, act-ci)"
 	@echo "make clean        - Remove artifacts and cache"
 	@echo "make docker-build - Build the Docker image"
 	@echo "make docker-run   - Run the Docker container"
 	@echo "make act          - Run GitHub Actions locally (requires 'act')"
+	@echo "make release-dry-run - Dry-run semantic release"
+	@echo "make audit        - Audit dependencies"
+	@echo "make act-ci       - Run CI workflow locally with act"
+	@echo "make act-release  - Run Release workflow locally with act (dry-run)"
 
 # --- Development ---
 
-install:
+lock:
+	@echo "🔒 Locking dependencies..."
+	uv lock
+
+sync: lock
 	@echo "📦 Syncing dependencies with Python $(PYTHON_VERSION)..."
 	uv sync --python $(PYTHON_VERSION)
+
+install: sync
+	@echo "✅ Dependencies installed."
 
 format:
 	@echo "✨ Formatting code..."
@@ -38,6 +50,21 @@ lint:
 test:
 	@echo "🧪 Running tests..."
 	uv run pytest
+
+validate-dev:
+	@echo "🔍 Running simple development validation..."
+	$(MAKE) install
+	$(MAKE) lint
+	$(MAKE) format
+	$(MAKE) test
+	@echo "✅ Development simple validation complete!"
+
+validate-dev-full: validate-dev
+	@echo "🔍 Running full development validation..."
+	$(MAKE) release-dry-run
+	@echo "🎬 Running act-ci (expected to fail locally with exit code 1)..."
+	-$(MAKE) act-ci || echo "✅ act-ci failed as expected in local environment"
+	@echo "✅ Full development validation complete!"
 
 clean:
 	@echo "🧹 Cleaning up..."
@@ -64,3 +91,19 @@ act:
 	@echo "🎬 Running GitHub Actions locally..."
 	# Requires 'act' installed via brew install act
 	act -j test --container-architecture linux/amd64
+
+release-dry-run:
+	@echo "🔍 Dry-run semantic release..."
+	uv run semantic-release version --print --no-commit --no-push --no-tag
+
+audit:
+	@echo "🔒 Auditing dependencies..."
+	uv pip compile pyproject.toml -o /dev/null --quiet && echo "✅ Dependencies resolve cleanly"
+
+act-ci:
+	@echo "🎬 Running CI workflow locally with act..."
+	act pull_request --container-architecture linux/amd64 -W .github/workflows/ci-pr.yml
+
+act-release:
+	@echo "🎬 Running Release workflow locally with act (dry-run)..."
+	act push --container-architecture linux/amd64 -W .github/workflows/cd-release.yml --dryrun

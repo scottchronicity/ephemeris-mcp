@@ -11,16 +11,25 @@ dependencies = [
     "pydantic"
 ]
 
-# This tells uv to install these tools for you
+# This tells uv to install these tools
 [dependency-groups]
 dev = [
     "pytest",
     "pytest-cov",
-    "ruff"
+    "ruff",
+    "python-semantic-release>=9.0.0",
 ]
 
 [project.scripts]
 astro-mcp = "astro_mcp.server:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.8.0",
+    "python-semantic-release>=9.0.0",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -36,3 +45,13 @@ line-length = 120
 target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+commit_parser = "conventional"
+build_command = "uv build"
+upload_to_pypi = false
+upload_to_vcs_release = true
+commit_version_number = true
+tag_format = "v{version}"

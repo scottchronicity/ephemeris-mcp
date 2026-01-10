@@ -1,26 +1,34 @@
 # Stage 1: Builder
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# Copy manifest
-COPY pyproject.toml .
-COPY .python-version .
+# Copy dependency files first (cache layer)
+COPY pyproject.toml uv.lock ./
 
-# Install dependencies (system-wide for Docker)
-RUN uv pip install --system .
+# Install dependencies with frozen lockfile (reproducible)
+RUN uv sync --frozen --no-dev --no-editable
+
+# Copy source code
+COPY src/ src/
 
 # Stage 2: Runtime
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy installed packages from builder
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-COPY src/ src/
+# Copy virtual environment from builder
+COPY --from=builder /app/.venv /app/.venv
 
-# Run via module
+# Copy source code
+COPY --from=builder /app/src /app/src
+
+# Use the virtual environment
+ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH="/app/src"
+
+# Run the MCP server
 CMD ["python", "-m", "astro_mcp.server"]

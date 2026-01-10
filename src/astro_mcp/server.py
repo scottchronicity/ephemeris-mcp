@@ -6,7 +6,7 @@ mcp = FastMCP("AstroMCP")
 
 
 @mcp.tool()
-def get_planetary_positions(iso_time: str, latitude: float = 43.8, longitude: float = -84.7) -> str:
+def get_planetary_positions(iso_time: str, latitude: float = 43.8, longitude: float = -84.7) -> dict:
     """
     Returns precise astrological positions (Tropical Zodiac) for a given time/place.
 
@@ -15,11 +15,8 @@ def get_planetary_positions(iso_time: str, latitude: float = 43.8, longitude: fl
         latitude: Observer latitude (default: Clare County, MI)
         longitude: Observer longitude (default: Clare County, MI)
     """
-    try:
-        data = calculate_chart(iso_time, latitude, longitude)
-        return str(data)
-    except Exception as e:
-        return f"Error: {e}"
+    data = calculate_chart(iso_date=iso_time, lat=latitude, lon=longitude)
+    return data
 
 
 def main():

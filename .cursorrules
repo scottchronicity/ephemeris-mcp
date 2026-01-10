@@ -1,0 +1,41 @@
+# Cursor Rules for AstroMCP
+
+## Stack
+- Python 3.11 (strict)
+- uv package manager
+- hatchling build backend
+- FastMCP for MCP server
+- Pydantic V2 for validation
+- Ruff for linting/formatting
+
+## Code Style
+- Type hints on ALL function signatures
+- Composition over inheritance
+- 120 character line length
+- Google-style docstrings
+- No bare `except:` clauses
+
+## Patterns
+- Use `logging` module, never `print()`
+- Raise `ValueError` for invalid inputs
+- Return typed dicts or Pydantic models
+- Keep functions under 50 lines
+
+## Boundaries
+- NEVER commit secrets or API keys
+- NEVER modify uv.lock manually
+- NEVER use `# type: ignore` without comment
+- ALWAYS reference AGENTS.md for context
+
+## Commands
+- `make test` before committing
+- `make lint` to check style
+- `make format` to auto-fix
+
+## Commits
+Follow Conventional Commits:
+- `feat:` new feature (minor bump)
+- `fix:` bug fix (patch bump)
+- `docs:` documentation only
+- `chore:` maintenance
+- `refactor:` code change, no feature change
