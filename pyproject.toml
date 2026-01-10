@@ -1,0 +1,38 @@
+[project]
+name = "astro-mcp"
+version = "0.1.0"
+description = "Precision astrological physics engine exposed via Model Context Protocol (MCP)."
+readme = "README.md"
+authors = [{ name = "Scott Carroll", email = "scott@rippleroot.studios" }]
+requires-python = ">=3.10, <3.12"
+dependencies = [
+    "flatlib",
+    "mcp>=0.1.0",
+    "pydantic"
+]
+
+# This tells uv to install these tools for you
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff"
+]
+
+[project.scripts]
+astro-mcp = "astro_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+addopts = "--cov=astro_mcp --cov-report=term-missing"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+[tool.ruff.lint]
+select = ["E", "F", "I"]
