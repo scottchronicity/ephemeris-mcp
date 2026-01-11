@@ -19,9 +19,9 @@ Complete these steps IN ORDER after implementation is complete.
 
 ## Phase 3: Verify GitHub Actions (3 minutes)
 
-- [ ] Go to GitHub → Actions tab
-- [ ] Verify "Release" workflow triggered
-- [ ] Watch workflow complete (should create v0.2.0 release)
+- [x] Go to GitHub → Actions tab
+- [x] Verify "Release" workflow triggered
+- [x] Watch workflow complete (should create v0.2.0 release)
 - [ ] Check Releases page for new release with changelog
 
 ## Phase 4: Verify Docker Image (2 minutes)
