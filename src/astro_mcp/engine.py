@@ -1,14 +1,12 @@
 import datetime
-import logging
 
+import structlog
 from flatlib import const
 from flatlib.chart import Chart
 from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
@@ -29,7 +27,7 @@ def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
         pos = GeoPos(lat, lon)
 
         # Calculate the chart with all planets including outer planets
-        # Note: Angles (ASC, MC, NORTH_NODE) cannot be included in IDs parameter
+        # Note: Angles (ASC, MC) are calculated automatically and accessed via chart.get()
         chart = Chart(
             date,
             pos,
@@ -44,12 +42,16 @@ def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
                 const.URANUS,
                 const.NEPTUNE,
                 const.PLUTO,
+                const.NORTH_NODE,
+                const.SOUTH_NODE,
+                const.CHIRON,
             ],
         )
 
         output = {
             "meta": {"timestamp": iso_date, "lat": lat, "lon": lon, "system": "Geocentric Tropical Zodiac"},
             "bodies": {},
+            "houses": {},
         }
 
         # Define bodies to track
@@ -64,17 +66,38 @@ def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
             (const.URANUS, "Uranus"),
             (const.NEPTUNE, "Neptune"),
             (const.PLUTO, "Pluto"),
+            (const.NORTH_NODE, "North Node"),
+            (const.SOUTH_NODE, "South Node"),
+            (const.CHIRON, "Chiron"),
+        ]
+
+        # Define angles to track
+        angles = [
             (const.ASC, "Ascendant"),
             (const.MC, "Midheaven"),
-            (const.NORTH_NODE, "North Node"),
+            (const.DESC, "Descendant"),
+            (const.IC, "Imum Coeli"),
+        ]
+
+        # Define house cusps to track
+        houses = [
+            (const.HOUSE1, "House 1"),
+            (const.HOUSE2, "House 2"),
+            (const.HOUSE3, "House 3"),
+            (const.HOUSE4, "House 4"),
+            (const.HOUSE5, "House 5"),
+            (const.HOUSE6, "House 6"),
+            (const.HOUSE7, "House 7"),
+            (const.HOUSE8, "House 8"),
+            (const.HOUSE9, "House 9"),
+            (const.HOUSE10, "House 10"),
+            (const.HOUSE11, "House 11"),
+            (const.HOUSE12, "House 12"),
         ]
 
         for body_id, friendly_name in bodies:
             try:
                 obj = chart.get(body_id)
-
-                # Access speed directly from the object attribute
-                # Angles (ASC/MC) might not have speed, default to 0.0
                 speed = getattr(obj, "lonspeed", 0.0)
 
                 output["bodies"][friendly_name] = {
@@ -85,13 +108,64 @@ def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
                     "motion": "retrograde" if speed < 0 else "direct",
                     "speed": float(f"{speed:.4f}"),
                 }
-            except KeyError:
-                # Skip planets that couldn't be calculated
-                logger.warning(f"Could not calculate {friendly_name}")
+            except (KeyError, AttributeError) as e:
+                logger.warning(
+                    "Could not calculate body",
+                    body=friendly_name,
+                    error=str(e),
+                    error_type=type(e).__name__,
+                )
+                continue
+
+        # Process angles (ASC, MC, DESC, IC)
+        for angle_id, friendly_name in angles:
+            try:
+                obj = chart.get(angle_id)
+                output["bodies"][friendly_name] = {
+                    "longitude": float(f"{obj.lon:.4f}"),
+                    "sign": str(obj.sign),
+                    "sign_degrees": float(f"{obj.signlon:.4f}"),
+                    "declination": float(f"{obj.lat:.4f}"),
+                    "motion": "direct",
+                    "speed": 0.0,
+                }
+            except (KeyError, AttributeError) as e:
+                logger.warning(
+                    "Could not calculate angle",
+                    angle=friendly_name,
+                    error=str(e),
+                    error_type=type(e).__name__,
+                )
+                continue
+
+        # Process house cusps
+        for house_id, friendly_name in houses:
+            try:
+                obj = chart.get(house_id)
+                output["houses"][friendly_name] = {
+                    "longitude": float(f"{obj.lon:.4f}"),
+                    "sign": str(obj.sign),
+                    "sign_degrees": float(f"{obj.signlon:.4f}"),
+                }
+            except (KeyError, AttributeError) as e:
+                logger.warning(
+                    "Could not calculate house",
+                    house=friendly_name,
+                    error=str(e),
+                    error_type=type(e).__name__,
+                )
                 continue
 
         return output
 
     except Exception as e:
-        logger.error(f"Calculation failed: {e}")
+        logger.error(
+            "Calculation failed",
+            error=str(e),
+            error_type=type(e).__name__,
+            iso_date=iso_date,
+            lat=lat,
+            lon=lon,
+            exc_info=True,
+        )
         raise ValueError(f"Physics Engine Error: {str(e)}")

@@ -14,8 +14,8 @@ class TestGetPlanetaryPositionsTool:
         """Mock the calculate_chart function to avoid Swiss Ephemeris dependency in tests."""
         with patch("astro_mcp.server.calculate_chart") as mock:
             mock.return_value = {
-                "timestamp": "2026-01-10T15:00:00+00:00",
-                "location": {"latitude": 43.8, "longitude": -84.7},
+                "timestamp": "2025-12-16T15:28:00+00:00",
+                "location": {"latitude": 42.3314, "longitude": -83.0458},
                 "bodies": {
                     "Sun": {
                         "longitude": 289.5,
@@ -53,10 +53,10 @@ class TestGetPlanetaryPositionsTool:
         """Test successful planetary position calculation with default parameters."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00")
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
         # Verify calculate_chart was called with correct parameters
-        mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=43.8, lon=-84.7)
+        mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=42.3314, lon=-83.0458)
 
         # Verify result structure
         assert isinstance(result, dict)
@@ -69,23 +69,23 @@ class TestGetPlanetaryPositionsTool:
         """Test calculation with custom latitude and longitude."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=51.5, longitude=-0.1)
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=51.5, longitude=-0.1)
 
-        mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=51.5, lon=-0.1)
+        mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=51.5, lon=-0.1)
 
-        assert result["location"]["latitude"] == 43.8  # From mock
-        assert result["location"]["longitude"] == -84.7  # From mock
+        assert result["location"]["latitude"] == 42.3314  # From mock
+        assert result["location"]["longitude"] == -83.0458  # From mock
 
     def test_valid_iso_timestamp_formats(self, mock_calculate_chart):
         """Test various valid ISO-8601 timestamp formats."""
         from astro_mcp.server import get_planetary_positions
 
         valid_timestamps = [
-            "2026-01-10T15:00:00",
-            "2026-01-10T15:00:00Z",
-            "2026-01-10T15:00:00+00:00",
-            "2026-01-10T15:00:00.000Z",
-            "2026-12-31T23:59:59",
+            "2025-12-16T15:28:00",
+            "2025-12-16T15:28:00Z",
+            "2025-12-16T15:28:00+00:00",
+            "2025-12-16T15:28:00.000Z",
+            "2025-12-31T23:59:59",
         ]
 
         for timestamp in valid_timestamps:
@@ -102,9 +102,9 @@ class TestGetPlanetaryPositionsTool:
 
         for lat in boundary_latitudes:
             mock_calculate_chart.reset_mock()
-            result = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=lat, longitude=0.0)
+            result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=lat, longitude=0.0)
             assert result is not None
-            mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=lat, lon=0.0)
+            mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=lat, lon=0.0)
 
     def test_longitude_boundary_values(self, mock_calculate_chart):
         """Test longitude boundary values (-180 to 180)."""
@@ -114,15 +114,15 @@ class TestGetPlanetaryPositionsTool:
 
         for lon in boundary_longitudes:
             mock_calculate_chart.reset_mock()
-            result = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=0.0, longitude=lon)
+            result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=0.0, longitude=lon)
             assert result is not None
-            mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=0.0, lon=lon)
+            mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=0.0, lon=lon)
 
     def test_result_contains_all_expected_bodies(self, mock_calculate_chart):
         """Verify result includes Sun and Moon at minimum."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00")
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
         assert "Sun" in result["bodies"]
         assert "Moon" in result["bodies"]
@@ -140,7 +140,7 @@ class TestGetPlanetaryPositionsTool:
         """Verify result includes Ascendant and Midheaven."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00")
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
         assert "Ascendant" in result["angles"]
         assert "Midheaven" in result["angles"]
@@ -165,7 +165,7 @@ class TestGetPlanetaryPositionsTool:
         """Verify the result can be serialized to JSON (important for MCP protocol)."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00")
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
         # Should not raise exception
         json_str = json.dumps(result)
@@ -181,7 +181,7 @@ class TestGetPlanetaryPositionsTool:
 
         result = get_planetary_positions(iso_time="2000-01-01T00:00:00")
 
-        mock_calculate_chart.assert_called_once_with(iso_date="2000-01-01T00:00:00", lat=43.8, lon=-84.7)
+        mock_calculate_chart.assert_called_once_with(iso_date="2000-01-01T00:00:00", lat=42.3314, lon=-83.0458)
         assert result is not None
 
     def test_timestamp_in_future(self, mock_calculate_chart):
@@ -190,24 +190,24 @@ class TestGetPlanetaryPositionsTool:
 
         result = get_planetary_positions(iso_time="2050-12-31T23:59:59")
 
-        mock_calculate_chart.assert_called_once_with(iso_date="2050-12-31T23:59:59", lat=43.8, lon=-84.7)
+        mock_calculate_chart.assert_called_once_with(iso_date="2050-12-31T23:59:59", lat=42.3314, lon=-83.0458)
         assert result is not None
 
     def test_location_precision(self, mock_calculate_chart):
         """Test that location coordinates are passed with precision."""
         from astro_mcp.server import get_planetary_positions
 
-        get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=43.123456, longitude=-84.987654)
+        get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=43.123456, longitude=-84.987654)
 
-        mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=43.123456, lon=-84.987654)
+        mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=43.123456, lon=-84.987654)
 
     def test_negative_coordinates(self, mock_calculate_chart):
         """Test with negative latitude and longitude (Southern/Western hemispheres)."""
         from astro_mcp.server import get_planetary_positions
 
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=-33.9, longitude=-151.2)
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=-33.9, longitude=-151.2)
 
-        mock_calculate_chart.assert_called_once_with(iso_date="2026-01-10T15:00:00", lat=-33.9, lon=-151.2)
+        mock_calculate_chart.assert_called_once_with(iso_date="2025-12-16T15:28:00", lat=-33.9, lon=-151.2)
         assert result is not None
 
 
@@ -259,7 +259,7 @@ class TestServerIntegration:
         from astro_mcp.server import get_planetary_positions
 
         # This test uses the real calculate_chart function
-        result = get_planetary_positions(iso_time="2026-01-10T15:00:00")
+        result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
         # Verify structure
         assert isinstance(result, dict)
@@ -267,9 +267,9 @@ class TestServerIntegration:
         assert "bodies" in result
 
         # Verify meta data
-        assert result["meta"]["timestamp"] == "2026-01-10T15:00:00"
-        assert result["meta"]["lat"] == 43.8
-        assert result["meta"]["lon"] == -84.7
+        assert result["meta"]["timestamp"] == "2025-12-16T15:28:00"
+        assert result["meta"]["lat"] == 42.3314
+        assert result["meta"]["lon"] == -83.0458
 
         # Verify bodies have numeric positions
         for body_name, body_data in result["bodies"].items():
@@ -280,12 +280,48 @@ class TestServerIntegration:
         """Verify that different geographic locations produce different house cusps."""
         from astro_mcp.server import get_planetary_positions
 
-        result1 = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=43.8, longitude=-84.7)
+        result1 = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=42.3314, longitude=-83.0458)
 
-        result2 = get_planetary_positions(iso_time="2026-01-10T15:00:00", latitude=51.5, longitude=-0.1)
+        result2 = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=51.5, longitude=-0.1)
 
         # Planetary positions should be the same (geocentric)
         assert result1["bodies"]["Sun"]["longitude"] == result2["bodies"]["Sun"]["longitude"]
 
         # But angles should differ (location-dependent)
         assert result1["bodies"]["Ascendant"]["longitude"] != result2["bodies"]["Ascendant"]["longitude"]
+
+    def test_main_function_exists(self):
+        """Test that main() function is callable and properly configured."""
+        from astro_mcp.server import main
+
+        # Verify main exists and is callable
+        assert callable(main)
+
+        # Verify the function signature
+        import inspect
+
+        sig = inspect.signature(main)
+        assert len(sig.parameters) == 0  # main() takes no arguments
+
+    def test_mcp_server_run_configuration(self):
+        """Test that the MCP server is properly configured for running."""
+        from unittest.mock import patch
+
+        from astro_mcp.server import mcp
+
+        # Verify mcp has a run method
+        assert hasattr(mcp, "run")
+        assert callable(mcp.run)
+
+        # Test that main would call mcp.run (we mock it to prevent actual execution)
+        with patch.object(mcp, "run") as mock_run:
+            from astro_mcp.server import main
+
+            # This won't actually run the server due to our mock
+            try:
+                main()
+            except SystemExit:
+                pass  # main() might call sys.exit, which is fine
+
+            # Verify run was called
+            mock_run.assert_called_once()

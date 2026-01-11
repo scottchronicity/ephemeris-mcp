@@ -19,8 +19,12 @@ help:
 	@echo "make test         - Run tests with coverage"
 	@echo "make validate-dev - Run development validation (install, lint, format-check, test)"
 	@echo "make clean        - Remove artifacts and cache"
-	@echo "make docker-build - Build the Docker image"
-	@echo "make docker-run   - Run the Docker container"
+	@echo "make docker-build     - Build the Docker image"
+	@echo "make docker-run       - Run the Docker container interactively"
+	@echo "make docker-happycase - Test the Docker image with a simple query"
+	@echo "make docker-dev       - Full Docker dev workflow (validate, build, test)"
+	@echo "make docker-clean     - Remove Docker images"
+	@echo "make validate-happycase - Test engine locally with a simple query"
 	@echo "make act          - Run GitHub Actions locally (requires 'act')"
 	@echo "make release-dry-run - Dry-run semantic release"
 	@echo "make audit        - Audit dependencies"
@@ -64,6 +68,12 @@ validate-dev:
 	$(MAKE) test
 	@echo "✅ Development simple validation complete!"
 
+validate-happycase:
+	@echo "🧪 Testing engine locally with planetary positions query..."
+	@echo "📍 Querying: 2025-12-16T15:28:00Z at New York (40.7128, -74.0060)"
+	@uv run python -c "from astro_mcp.engine import calculate_chart; result = calculate_chart('2025-12-16T15:28:00Z', 40.7128, -74.0060); print('✅ Engine working!\n'); print('🌟 BODIES:'); [print(f'  {name:18} {data[\"sign\"]:10} {data[\"sign_degrees\"]:6.2f}° ({data[\"motion\"]})') for name, data in result['bodies'].items()]; print('\n🏠 HOUSES:'); [print(f'  {name:18} {data[\"sign\"]:10} {data[\"sign_degrees\"]:6.2f}°') for name, data in result['houses'].items()]"
+	@echo "\n✅ Happy case test passed!"
+
 validate-dev-full: validate-dev
 	@echo "🔍 Running full development validation..."
 	$(MAKE) release-dry-run
@@ -85,10 +95,27 @@ docker-build:
 	@echo "🐳 Building Docker image..."
 	docker build -t $(IMAGE_NAME):$(VERSION) .
 	docker tag $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest
+	@echo "✅ Docker image built: $(IMAGE_NAME):$(VERSION) and $(IMAGE_NAME):latest"
 
 docker-run:
-	@echo "🚀 Running container..."
+	@echo "🚀 Running container interactively..."
 	docker run -it --rm $(IMAGE_NAME):latest
+
+docker-happycase:
+	@echo "🧪 Testing Docker image with planetary positions query..."
+	@echo "📍 Querying: 2025-12-16T15:28:00Z at New York (40.7128, -74.0060)"
+	@docker run --rm $(IMAGE_NAME):latest python -c "from astro_mcp.engine import calculate_chart; import json; result = calculate_chart('2025-12-16T15:28:00Z', 40.7128, -74.0060); print('✅ Docker image working!\n'); print('🌟 BODIES:'); [print(f'  {name:18} {data[\"sign\"]:10} {data[\"sign_degrees\"]:6.2f}° ({data[\"motion\"]})') for name, data in result['bodies'].items()]; print('\n🏠 HOUSES:'); [print(f'  {name:18} {data[\"sign\"]:10} {data[\"sign_degrees\"]:6.2f}°') for name, data in result['houses'].items()]"
+	@echo "\n✅ Docker test passed!"
+
+docker-dev: validate-dev docker-build docker-happycase
+	@echo "✅ Full Docker dev workflow complete!"
+	@echo "📦 Image ready: $(IMAGE_NAME):$(VERSION)"
+	@echo "🚀 To run: make docker-run"
+
+docker-clean:
+	@echo "🧹 Removing Docker images..."
+	docker rmi $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest || true
+	@echo "✅ Docker images removed"
 
 # --- CI/CD (Local) ---
 

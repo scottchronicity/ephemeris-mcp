@@ -98,14 +98,14 @@ from astro_mcp.engine import calculate_chart
 mcp = FastMCP("AstroMCP")
 
 @mcp.tool()
-def get_planetary_positions(iso_time: str, latitude: float = 43.8, longitude: float = -84.7) -> str:
+def get_planetary_positions(iso_time: str, latitude: float = 42.3314, longitude: float = -83.0458) -> str:
     """
     Returns precise astrological positions (Tropical Zodiac) for a given time/place.
-    
+
     Args:
-        iso_time: ISO-8601 string (e.g., '2026-01-10T15:00:00')
-        latitude: Observer latitude (default: Clare County, MI)
-        longitude: Observer longitude (default: Clare County, MI)
+        iso_time: ISO-8601 string (e.g., '2025-12-16T15:28:00')
+        latitude: Observer latitude (default: Detroit, MI)
+        longitude: Observer longitude (default: Detroit, MI)
     """
     try:
         data = calculate_chart(iso_time, latitude, longitude)
@@ -130,7 +130,7 @@ from astro_mcp.engine import calculate_chart
 
 def test_calculate_chart_structure():
     """Ensure the JSON structure matches the ADR spec."""
-    result = calculate_chart("2026-01-01T12:00:00", 43.8, -84.7)
+    result = calculate_chart("2025-12-16T15:28:00", 42.3314, -83.0458)
     
     assert "meta" in result
     assert "bodies" in result

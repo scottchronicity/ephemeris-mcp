@@ -38,9 +38,9 @@ docker run -i astro-mcp:latest
 AstroMCP exposes a single MCP tool: `get_planetary_positions`
 
 **Parameters:**
-- `iso_time`: ISO-8601 timestamp (e.g., `2026-01-10T15:00:00`)
-- `latitude`: Observer latitude (default: 43.8)
-- `longitude`: Observer longitude (default: -84.7)
+- `iso_time`: ISO-8601 timestamp (e.g., `2025-12-16T15:28:00`)
+- `latitude`: Observer latitude (default: 42.3314, Detroit, MI)
+- `longitude`: Observer longitude (default: -83.0458, Detroit, MI)
 
 **Returns:** JSON with planetary positions in Tropical Zodiac coordinates.
 
