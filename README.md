@@ -1,5 +1,9 @@
 # Ephemeris MCP 🌌
 
+[![PyPI version](https://badge.fury.io/py/ephemeris-mcp.svg)](https://badge.fury.io/py/ephemeris-mcp)
+[![CI](https://github.com/scottchronicity/ephemeris-mcp/actions/workflows/ci-pr.yml/badge.svg)](https://github.com/scottchronicity/ephemeris-mcp/actions/workflows/ci-pr.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
 **Precision Astronomical Ephemeris for AI Agents.**
 
 Ephemeris MCP is a Model Context Protocol (MCP) server that provides AI agents with precision planetary positions using the **Swiss Ephemeris**.
