@@ -14,9 +14,10 @@ help:
 	@echo "============================="
 	@echo "make install      - Sync dependencies (uses Python $(PYTHON_VERSION))"
 	@echo "make format       - Format code using Ruff"
+	@echo "make format-check - Check code formatting without modifying"
 	@echo "make lint         - Lint code using Ruff"
 	@echo "make test         - Run tests with coverage"
-	@echo "make validate-dev - Run full development validation (install, lint, format, test, release-dry-run, act-ci)"
+	@echo "make validate-dev - Run development validation (install, lint, format-check, test)"
 	@echo "make clean        - Remove artifacts and cache"
 	@echo "make docker-build - Build the Docker image"
 	@echo "make docker-run   - Run the Docker container"
@@ -43,6 +44,10 @@ format:
 	@echo "✨ Formatting code..."
 	uv run ruff format .
 
+format-check:
+	@echo "🔍 Checking code formatting..."
+	uv run ruff format --check .
+
 lint:
 	@echo "🔍 Linting code..."
 	uv run ruff check . --fix
@@ -55,7 +60,7 @@ validate-dev:
 	@echo "🔍 Running simple development validation..."
 	$(MAKE) install
 	$(MAKE) lint
-	$(MAKE) format
+	$(MAKE) format-check
 	$(MAKE) test
 	@echo "✅ Development simple validation complete!"
 
