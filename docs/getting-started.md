@@ -10,8 +10,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/scottchronicity/astro-mcp.git
-cd astro-mcp
+git clone https://github.com/scottchronicity/ephemeris-mcp.git
+cd ephemeris-mcp
 
 # Install dependencies
 make install
@@ -20,7 +20,7 @@ make install
 make test
 
 # Start the MCP server
-uv run astro-mcp
+uv run ephemeris-mcp
 ```
 
 ## Docker
@@ -30,12 +30,12 @@ uv run astro-mcp
 make docker-build
 
 # Run the container
-docker run -i astro-mcp:latest
+docker run -i ephemeris-mcp:latest
 ```
 
 ## Using with AI Agents
 
-AstroMCP exposes a single MCP tool: `get_planetary_positions`
+EphemerisMCP exposes a single MCP tool: `get_planetary_positions`
 
 **Parameters:**
 - `iso_time`: ISO-8601 timestamp (e.g., `2025-12-16T15:28:00`)

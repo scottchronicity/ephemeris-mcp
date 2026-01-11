@@ -1,6 +1,6 @@
 import pytest
 
-from astro_mcp.engine import calculate_chart
+from ephemeris_mcp.engine import calculate_chart
 
 
 def test_calculate_chart_structure():

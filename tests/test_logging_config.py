@@ -6,7 +6,7 @@ import logging
 
 import structlog
 
-from astro_mcp.logging_config import setup_logging
+from ephemeris_mcp.logging_config import setup_logging
 
 
 def test_setup_logging_configures_structlog():

@@ -1,8 +1,8 @@
-# AstroMCP Documentation
+# EphemerisMCP Documentation
 
 **Precision Astrological Physics for AI Agents**
 
-AstroMCP is a Model Context Protocol (MCP) server that provides AI agents with ground-truth planetary positions using the Swiss Ephemeris.
+EphemerisMCP is a Model Context Protocol (MCP) server that provides AI agents with ground-truth planetary positions using the Swiss Ephemeris.
 
 ## Quick Links
 

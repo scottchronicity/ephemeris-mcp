@@ -4,14 +4,14 @@
 
 ## Project Overview
 
-AstroMCP is a Model Context Protocol (MCP) server providing precision astrological calculations via the Swiss Ephemeris.
+Ephemeris MCP is a Model Context Protocol (MCP) server providing precision astronomical ephemeris calculations via the Swiss Ephemeris.
 
 ## Codebase Map
 
 | Path | Purpose |
 |------|---------|
-| `src/astro_mcp/server.py` | MCP server interface (FastMCP) |
-| `src/astro_mcp/engine.py` | Physics calculation engine (Flatlib/Swiss Ephemeris) |
+| `src/ephemeris_mcp/server.py` | MCP server interface (FastMCP) |
+| `src/ephemeris_mcp/engine.py` | Physics calculation engine (Flatlib/Swiss Ephemeris) |
 | `tests/test_engine.py` | Unit tests for calculation engine |
 | `docs/adr/` | Architecture Decision Records |
 

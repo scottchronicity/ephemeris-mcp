@@ -23,7 +23,7 @@ What actually happened.
 ## Environment
 - OS: 
 - Python version: 
-- astro-mcp version: 
+- ephemeris-mcp version: 
 
 ## Additional Context
 Any other relevant information.

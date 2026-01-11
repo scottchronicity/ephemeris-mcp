@@ -1,7 +1,7 @@
-# GitHub Copilot Instructions for AstroMCP
+# GitHub Copilot Instructions for Ephemeris MCP
 
 ## What This Project Does
-AstroMCP is an MCP (Model Context Protocol) server that calculates planetary positions using the Swiss Ephemeris. It provides AI agents with ground-truth astrological data in Tropical Zodiac coordinates.
+Ephemeris MCP is an MCP (Model Context Protocol) server that calculates planetary positions using the Swiss Ephemeris. It provides AI agents with precision astronomical ephemeris data in Tropical Zodiac coordinates.
 
 ## Architecture
 - `server.py`: FastMCP server exposing `get_planetary_positions` tool

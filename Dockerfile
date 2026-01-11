@@ -36,4 +36,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/src"
 
 # Run the MCP server
-CMD ["python", "-m", "astro_mcp.server"]
+CMD ["python", "-m", "ephemeris_mcp.server"]

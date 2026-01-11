@@ -46,7 +46,7 @@ def enable_debug_logging():
         cache_logger_on_first_use=False,
     )
 
-    logger = structlog.get_logger("astro_mcp")
+    logger = structlog.get_logger("ephemeris_mcp")
 
     yield logger
 

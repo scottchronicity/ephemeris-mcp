@@ -1,6 +1,6 @@
 # See AGENTS.md for project context and conventions
 
-"""Logging configuration for AstroMCP.
+"""Logging configuration for EphemerisMCP.
 
 This module provides structured logging setup using structlog:
 - JSON-serializable structured events

@@ -1,15 +1,15 @@
 #!/bin/bash
-# setup_astro_mcp.sh
+# setup_ephemeris_mcp.sh
 
 # 1. Create Directory Structure
-mkdir -p astro-mcp/{src/astro_mcp,tests,.github/workflows}
-cd astro-mcp
+mkdir -p ephemeris-mcp/{src/ephemeris_mcp,tests,.github/workflows}
+cd ephemeris-mcp
 
 # 2. Fix Dependency Conflict in pyproject.toml
 # We let flatlib dictate the pyswisseph version to avoid the lock error.
 cat <<EOF > pyproject.toml
 [project]
-name = "astro-mcp"
+name = "ephemeris-mcp"
 version = "0.1.0"
 description = "Precision astrological physics engine exposed via Model Context Protocol (MCP)."
 readme = "README.md"
@@ -22,20 +22,20 @@ dependencies = [
 ]
 
 [project.scripts]
-astro-mcp = "astro_mcp.server:main"
+ephemeris-mcp = "ephemeris_mcp.server:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
-addopts = "--cov=astro_mcp --cov-report=term-missing"
+addopts = "--cov=ephemeris_mcp --cov-report=term-missing"
 testpaths = ["tests"]
 pythonpath = ["src"]
 EOF
 
-# 3. Create the Physics Engine (src/astro_mcp/engine.py)
-cat <<EOF > src/astro_mcp/engine.py
+# 3. Create the Physics Engine (src/ephemeris_mcp/engine.py)
+cat <<EOF > src/ephemeris_mcp/engine.py
 from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from flatlib.chart import Chart
@@ -90,12 +90,12 @@ def calculate_chart(iso_date: str, lat: float, lon: float) -> dict:
         raise ValueError(f"Physics Engine Error: {str(e)}")
 EOF
 
-# 4. Create the MCP Server (src/astro_mcp/server.py)
-cat <<EOF > src/astro_mcp/server.py
+# 4. Create the MCP Server (src/ephemeris_mcp/server.py)
+cat <<EOF > src/ephemeris_mcp/server.py
 from mcp.server.fastmcp import FastMCP
-from astro_mcp.engine import calculate_chart
+from ephemeris_mcp.engine import calculate_chart
 
-mcp = FastMCP("AstroMCP")
+mcp = FastMCP("EphemerisMCP")
 
 @mcp.tool()
 def get_planetary_positions(iso_time: str, latitude: float = 42.3314, longitude: float = -83.0458) -> str:
@@ -121,12 +121,12 @@ if __name__ == "__main__":
 EOF
 
 # 5. Create empty init
-touch src/astro_mcp/__init__.py
+touch src/ephemeris_mcp/__init__.py
 
 # 6. Create Tests (tests/test_engine.py)
 cat <<EOF > tests/test_engine.py
 import pytest
-from astro_mcp.engine import calculate_chart
+from ephemeris_mcp.engine import calculate_chart
 
 def test_calculate_chart_structure():
     """Ensure the JSON structure matches the ADR spec."""
@@ -174,7 +174,7 @@ COPY src/ src/
 # Expose MCP standard port if needed, but usually runs over stdio
 # For SSE/HTTP transport, we might expose 8000 later.
 
-CMD ["python", "-m", "astro_mcp.server"]
+CMD ["python", "-m", "ephemeris_mcp.server"]
 EOF
 
 # 8. Create GitHub Actions CI (Best Practice)
@@ -209,24 +209,24 @@ EOF
 
 # 9. Create README
 cat <<EOF > README.md
-# AstroMCP 🌌
+# EphemerisMCP 🌌
 
 **Precision Astrological Physics for AI Agents.**
 
-AstroMCP is a Model Context Protocol (MCP) server that provides AI agents with ground-truth planetary positions using the **Swiss Ephemeris**.
+EphemerisMCP is a Model Context Protocol (MCP) server that provides AI agents with ground-truth planetary positions using the **Swiss Ephemeris**.
 
 ## Quick Start
 
 ### Local
 \`\`\`bash
 uv sync
-uv run astro-mcp
+uv run ephemeris-mcp
 \`\`\`
 
 ### Docker
 \`\`\`bash
-docker build -t astro-mcp .
-docker run -i astro-mcp
+docker build -t ephemeris-mcp .
+docker run -i ephemeris-mcp
 \`\`\`
 
 ## Architecture
@@ -236,4 +236,4 @@ See [ADR 001](coordinate_system.md) for the coordinate system specification.
 AGPLv3
 EOF
 
-echo "✨ AstroMCP Scaffolded! Run 'cd astro-mcp && uv sync' to start."
+echo "✨ EphemerisMCP Scaffolded! Run 'cd ephemeris-mcp && uv sync' to start."

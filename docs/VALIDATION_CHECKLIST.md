@@ -26,15 +26,16 @@ Complete these steps IN ORDER after implementation is complete.
 
 ## Phase 4: Verify Docker Image (2 minutes)
 
-- [ ] Go to GitHub → Packages (right sidebar)
-- [ ] Find `astro-mcp` package
-- [ ] Verify tags: `v0.2.0` and `latest`
+- [x] Go to GitHub → Packages (right sidebar)
+- [x] Find `ephemeris-mcp` package (<https://github.com/scottchronicity/ephemeris-mcp/pkgs/container/ephemeris-mcp>)
+- [x] Verify tags: `v0.2.0` and `latest` (latest
+v1.0.0))
 
 ## Phase 5: GHCR Public Access (Optional)
 
 If you want the Docker image publicly pullable:
 
-1. Go to GitHub → Packages → astro-mcp
+1. Go to GitHub → Packages → ephemeris-mcp
 2. Click "Package settings"
 3. Scroll to "Danger Zone"
 4. Click "Change visibility" → Public
@@ -42,8 +43,8 @@ If you want the Docker image publicly pullable:
 Test:
 
 ```bash
-docker pull ghcr.io/scottchronicity/astro-mcp:latest
-docker run -i ghcr.io/scottchronicity/astro-mcp:latest
+docker pull ghcr.io/scottchronicity/ephemeris-mcp:latest
+docker run -i ghcr.io/scottchronicity/ephemeris-mcp:latest
 ```
 
 ## Phase 6: PyPI Setup (Optional, Later)

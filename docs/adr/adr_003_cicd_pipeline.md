@@ -35,7 +35,7 @@ Critical for reproducibility. The `--frozen` flag:
 **GHCR over Docker Hub**
 - Native GitHub integration (uses GITHUB_TOKEN, no extra secrets)
 - Unlimited public images
-- Tags: `ghcr.io/scottchronicity/astro-mcp:vX.Y.Z` and `:latest`
+- Tags: `ghcr.io/scottchronicity/ephemeris-mcp:vX.Y.Z` and `:latest`
 
 **GitHub Actions Permissions**
 Workflow needs `contents: write` (for tags) and `packages: write` (for GHCR).

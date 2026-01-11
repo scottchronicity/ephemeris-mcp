@@ -1,12 +1,12 @@
 from mcp.server.fastmcp import FastMCP
 
-from astro_mcp.engine import calculate_chart
-from astro_mcp.logging_config import setup_logging
+from ephemeris_mcp.engine import calculate_chart
+from ephemeris_mcp.logging_config import setup_logging
 
 # Initialize logging
 setup_logging()
 
-mcp = FastMCP("AstroMCP")
+mcp = FastMCP("EphemerisMCP")
 
 
 @mcp.tool()

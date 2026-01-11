@@ -12,7 +12,7 @@ class TestGetPlanetaryPositionsTool:
     @pytest.fixture
     def mock_calculate_chart(self):
         """Mock the calculate_chart function to avoid Swiss Ephemeris dependency in tests."""
-        with patch("astro_mcp.server.calculate_chart") as mock:
+        with patch("ephemeris_mcp.server.calculate_chart") as mock:
             mock.return_value = {
                 "timestamp": "2025-12-16T15:28:00+00:00",
                 "location": {"latitude": 42.3314, "longitude": -83.0458},
@@ -43,7 +43,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_tool_registration(self):
         """Verify the tool is registered in the server."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         # Check that the function exists and is callable
         assert callable(get_planetary_positions)
@@ -51,7 +51,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_successful_calculation_with_defaults(self, mock_calculate_chart):
         """Test successful planetary position calculation with default parameters."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
@@ -67,7 +67,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_successful_calculation_with_custom_location(self, mock_calculate_chart):
         """Test calculation with custom latitude and longitude."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=51.5, longitude=-0.1)
 
@@ -78,7 +78,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_valid_iso_timestamp_formats(self, mock_calculate_chart):
         """Test various valid ISO-8601 timestamp formats."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         valid_timestamps = [
             "2025-12-16T15:28:00",
@@ -96,7 +96,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_latitude_boundary_values(self, mock_calculate_chart):
         """Test latitude boundary values (-90 to 90)."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         boundary_latitudes = [-90.0, -45.0, 0.0, 45.0, 90.0]
 
@@ -108,7 +108,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_longitude_boundary_values(self, mock_calculate_chart):
         """Test longitude boundary values (-180 to 180)."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         boundary_longitudes = [-180.0, -90.0, 0.0, 90.0, 180.0]
 
@@ -120,7 +120,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_result_contains_all_expected_bodies(self, mock_calculate_chart):
         """Verify result includes Sun and Moon at minimum."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
@@ -138,7 +138,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_result_contains_angles(self, mock_calculate_chart):
         """Verify result includes Ascendant and Midheaven."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
@@ -153,9 +153,9 @@ class TestGetPlanetaryPositionsTool:
 
     def test_error_propagation_from_engine(self):
         """Test that errors from the engine are properly propagated."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
-        with patch("astro_mcp.server.calculate_chart") as mock:
+        with patch("ephemeris_mcp.server.calculate_chart") as mock:
             mock.side_effect = ValueError("Invalid timestamp format")
 
             with pytest.raises(ValueError, match="Invalid timestamp format"):
@@ -163,7 +163,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_result_is_json_serializable(self, mock_calculate_chart):
         """Verify the result can be serialized to JSON (important for MCP protocol)."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
 
@@ -177,7 +177,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_timestamp_in_past(self, mock_calculate_chart):
         """Test calculation for historical dates."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2000-01-01T00:00:00")
 
@@ -186,7 +186,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_timestamp_in_future(self, mock_calculate_chart):
         """Test calculation for future dates."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2050-12-31T23:59:59")
 
@@ -195,7 +195,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_location_precision(self, mock_calculate_chart):
         """Test that location coordinates are passed with precision."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=43.123456, longitude=-84.987654)
 
@@ -203,7 +203,7 @@ class TestGetPlanetaryPositionsTool:
 
     def test_negative_coordinates(self, mock_calculate_chart):
         """Test with negative latitude and longitude (Southern/Western hemispheres)."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=-33.9, longitude=-151.2)
 
@@ -216,7 +216,7 @@ class TestServerModule:
 
     def test_mcp_server_instance_exists(self):
         """Verify the FastMCP server instance is created."""
-        from astro_mcp.server import mcp
+        from ephemeris_mcp.server import mcp
 
         assert mcp is not None
         # Verify mcp has the correct type
@@ -224,22 +224,22 @@ class TestServerModule:
 
     def test_server_has_correct_name(self):
         """Verify the MCP server has the correct name."""
-        from astro_mcp.server import mcp
+        from ephemeris_mcp.server import mcp
 
         # FastMCP server should have a name attribute
         assert hasattr(mcp, "name")
-        assert mcp.name == "AstroMCP"
+        assert mcp.name == "EphemerisMCP"
 
     def test_tool_function_exists(self):
         """Verify the tool function is exported from the module."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         assert callable(get_planetary_positions)
         assert get_planetary_positions.__doc__ is not None
 
     def test_module_imports(self):
         """Verify all required imports are available."""
-        import astro_mcp.server as server_module
+        import ephemeris_mcp.server as server_module
 
         # Check that engine is imported
         assert hasattr(server_module, "calculate_chart")
@@ -256,7 +256,7 @@ class TestServerIntegration:
 
     def test_real_calculation_integration(self):
         """Test actual calculation with real engine (integration test)."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         # This test uses the real calculate_chart function
         result = get_planetary_positions(iso_time="2025-12-16T15:28:00")
@@ -278,7 +278,7 @@ class TestServerIntegration:
 
     def test_different_locations_produce_different_angles(self):
         """Verify that different geographic locations produce different house cusps."""
-        from astro_mcp.server import get_planetary_positions
+        from ephemeris_mcp.server import get_planetary_positions
 
         result1 = get_planetary_positions(iso_time="2025-12-16T15:28:00", latitude=42.3314, longitude=-83.0458)
 
@@ -292,7 +292,7 @@ class TestServerIntegration:
 
     def test_main_function_exists(self):
         """Test that main() function is callable and properly configured."""
-        from astro_mcp.server import main
+        from ephemeris_mcp.server import main
 
         # Verify main exists and is callable
         assert callable(main)
@@ -307,7 +307,7 @@ class TestServerIntegration:
         """Test that the MCP server is properly configured for running."""
         from unittest.mock import patch
 
-        from astro_mcp.server import mcp
+        from ephemeris_mcp.server import mcp
 
         # Verify mcp has a run method
         assert hasattr(mcp, "run")
@@ -315,7 +315,7 @@ class TestServerIntegration:
 
         # Test that main would call mcp.run (we mock it to prevent actual execution)
         with patch.object(mcp, "run") as mock_run:
-            from astro_mcp.server import main
+            from ephemeris_mcp.server import main
 
             # This won't actually run the server due to our mock
             try:
