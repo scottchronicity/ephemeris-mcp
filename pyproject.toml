@@ -1,6 +1,6 @@
 [project]
 name = "astro-mcp"
-version = "0.1.0"
+version = "1.0.0"
 description = "Precision astrological physics engine exposed via Model Context Protocol (MCP)."
 readme = "README.md"
 authors = [{ name = "Scott Carroll", email = "scott@rippleroot.studios" }]
