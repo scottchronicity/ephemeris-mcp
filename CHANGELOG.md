@@ -2,6 +2,26 @@
 
 <!-- version list -->
 
+## v1.2.0 (2026-03-27)
+
+### Bug Fixes
+
+- Add MCP registry ownership verification string to README
+  ([#4](https://github.com/scottchronicity/ephemeris-mcp/pull/4),
+  [`9e3abaf`](https://github.com/scottchronicity/ephemeris-mcp/commit/9e3abaff9c930fd0728dfbd5b6a0ea1c933c885b))
+
+### Chores
+
+- Update license to AGPLv3 and add badges
+  ([`f62db77`](https://github.com/scottchronicity/ephemeris-mcp/commit/f62db77f93cc0f851b9a7f3112c5a95860f1e600))
+
+### Features
+
+- Add Claude Plugin Marketplace manifest
+  ([#3](https://github.com/scottchronicity/ephemeris-mcp/pull/3),
+  [`0f60bc5`](https://github.com/scottchronicity/ephemeris-mcp/commit/0f60bc560bc3c203f2aaabde2c95a880d89e09ba))
+
+
 ## v1.1.1 (2026-01-11)
 
 ### Bug Fixes
