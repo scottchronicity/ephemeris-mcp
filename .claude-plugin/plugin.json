@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Precision astronomical ephemeris for AI agents. Provides planetary positions and chart angles via the Swiss Ephemeris.",
   "author": "scottchronicity",
+  "icon": "./icon.svg",
   "type": "mcp-server",
   "source": {
     "type": "pypi",
