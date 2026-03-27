@@ -8,6 +8,17 @@
 
 Ephemeris MCP is a Model Context Protocol (MCP) server that provides AI agents with precision planetary positions using the **Swiss Ephemeris**.
 
+To use this in Claude Desktop, add this to your `claude_desktop_config.json`:
+
+```json
+"mcpServers": {
+  "ephemeris": {
+    "command": "uvx",
+    "args": ["ephemeris-mcp"]
+  }
+}
+```
+
 ## Quick Start
 
 ### Install via PyPI (Recommended)
