@@ -1,0 +1,22 @@
+{
+  "name": "ephemeris-mcp",
+  "version": "0.1.0",
+  "description": "Precision astronomical ephemeris for AI agents. Provides planetary positions and chart angles via the Swiss Ephemeris.",
+  "author": "scottchronicity",
+  "type": "mcp-server",
+  "source": {
+    "type": "pypi",
+    "package": "ephemeris-mcp"
+  },
+  "runtime": {
+    "command": "uvx",
+    "args": ["ephemeris-mcp"]
+  },
+  "capabilities": {
+    "mcp": {
+      "name": "ephemeris-mcp",
+      "description": "Calculates tropical zodiac positions, houses, and celestial body data."
+    }
+  },
+  "categories": ["science", "data-analysis", "astronomy"]
+}
