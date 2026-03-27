@@ -4,6 +4,8 @@
 [![CI](https://github.com/scottchronicity/ephemeris-mcp/actions/workflows/ci-pr.yml/badge.svg)](https://github.com/scottchronicity/ephemeris-mcp/actions/workflows/ci-pr.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
+mcp-name: io.github.scottchronicity/ephemeris-mcp
+
 **Precision Astronomical Ephemeris for AI Agents.**
 
 Ephemeris MCP is a Model Context Protocol (MCP) server that provides AI agents with precision planetary positions using the **Swiss Ephemeris**.
@@ -114,17 +116,20 @@ make validate-happycase
 Returns precise Tropical Zodiac positions for all planets, Sun, Moon, and chart angles.
 
 **Parameters:**
+
 - `iso_time` (string): ISO-8601 timestamp (e.g., `"2025-12-16T15:28:00Z"`)
 - `latitude` (float): Observer latitude (default: 42.3314 - Detroit, MI)
 - `longitude` (float): Observer longitude (default: -83.0458 - Detroit, MI)
 
 **Returns:**
+
 - `bodies`: Sun, Moon, planets with sign, degrees, motion (direct/retrograde), speed, declination
 - `houses`: Ascendant (ASC) and Midheaven (MC) with sign and degrees
 
 ## Architecture
 
 See [docs/adr/](docs/adr/) for architectural decisions:
+
 - **ADR 001**: Geocentric Tropical Ecliptic coordinates specification
 - **ADR 002**: Semantic versioning with Conventional Commits
 - **ADR 003**: CI/CD pipeline architecture
@@ -132,4 +137,3 @@ See [docs/adr/](docs/adr/) for architectural decisions:
 ## License
 
 AGPLv3
-
